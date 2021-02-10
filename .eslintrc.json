@@ -1,6 +1,3 @@
-// 20210206213506
-// https://raw.githubusercontent.com/maironvilela/desafio-fundamentos-node/master/.eslintrc.json
-
 {
   "env": {
     "es6": true,
@@ -28,6 +25,8 @@
   ],
   "rules": {
     "prettier/prettier": "error",
+    "class-methods-use-this": "off",
+    "@typescript-eslint/camelcase": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -38,9 +37,7 @@
   },
   "settings": {
     "import/resolver": {
-      "typescript": {
-
-      }
+      "typescript": {}
     }
   }
 }

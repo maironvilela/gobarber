@@ -5,7 +5,10 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
+    "strictPropertyInitialization": false,  //alterada
     "esModuleInterop": true,
+    "experimentalDecorators": true,   //alterada
+    "emitDecoratorMetadata": true ,   //alterada
     "forceConsistentCasingInFileNames": true
   }
 }
