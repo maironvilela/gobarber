@@ -3,6 +3,8 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
+import authConfig from '../config/auth';
+import AppError from '../errors/AppError';
 
 interface Request {
   email: string;
@@ -23,25 +25,20 @@ class AuthenticateUserServer {
     });
 
     if (!user) {
-      throw new Error('Email ou senha Invalido');
+      throw new AppError('Email ou senha Invalido', 401);
     }
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new Error('Email ou senha Invalido');
+      throw new AppError('Email ou senha Invalidos', 401);
     }
 
-    const token = sign(
-      {
-        email: user.email,
-        id: user.id,
-      },
-      'fe3a5f50885670307b2f51e2d158640a',
-      {
-        subject: user.id,
-        expiresIn: '1d',
-      },
-    );
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = sign({}, secret, {
+      subject: user.id,
+      expiresIn,
+    });
 
     return { user, token };
   }

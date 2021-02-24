@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
 import User from '../models/User';
+import AppError from '../errors/AppError';
 
 interface Request {
   name: string;
@@ -16,7 +17,7 @@ class CreateUserService {
     });
 
     if (CheckEmailExists) {
-      throw new Error('E-mail ja cadastrado');
+      throw new AppError('E-mail ja cadastrado', 400);
     }
 
     const hashedPassword = await hash(password, 8);
@@ -26,6 +27,8 @@ class CreateUserService {
       email,
       password: hashedPassword,
     });
+
+    user.avatar = 'avatar_padrao.png';
 
     const userSave = await userRepository.save(user);
 

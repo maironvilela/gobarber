@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
-import CreateUserService from '../services/CreateUserService';
+import multer from 'multer';
+import uploadConfig from '../config/upload';
 
+import CreateUserService from '../services/CreateUserService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import User from '../models/User';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 interface UserResponse {
   name: string;
@@ -12,6 +16,7 @@ interface UserResponse {
 }
 
 const userRouter = Router();
+const upload = multer(uploadConfig);
 
 userRouter.get('/', async (request, response) => {
   const userRepository = getRepository(User);
@@ -19,20 +24,34 @@ userRouter.get('/', async (request, response) => {
   return response.json(users);
 });
 
-userRouter.post('/', async (request, response) => {
-  try {
-    const { name, email, password } = request.body;
-    const createUserService = new CreateUserService();
-    const user = await createUserService.execute({
-      name,
-      email,
-      password,
+userRouter.patch(
+  '/avatar',
+  ensureAuthenticated,
+  upload.single('avatar'),
+  async (request, response) => {
+    const avatarFileName = request.file.filename;
+    const user_id = request.user.id;
+
+    const updateServerAvaterService = new UpdateUserAvatarService();
+    const user = await updateServerAvaterService.execute({
+      avatarFileName,
+      user_id,
     });
 
     return response.json(user);
-  } catch (error) {
-    return response.status(400).json({ error: error.message });
-  }
+  },
+);
+
+userRouter.post('/', async (request, response) => {
+  const { name, email, password } = request.body;
+  const createUserService = new CreateUserService();
+  const user = await createUserService.execute({
+    name,
+    email,
+    password,
+  });
+
+  return response.json(user);
 });
 
 export default userRouter;
