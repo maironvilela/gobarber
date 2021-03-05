@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import multer from 'multer';
-import uploadConfig from '../config/upload';
+import uploadConfig from '@config/upload';
 
-import CreateUserService from '../services/CreateUserService';
+import CreateUserService from '@services/CreateUserService';
+import UpdateUserAvatarService from '@services/UpdateUserAvatarService';
+import User from '../../../../modules/users/infra/typeorm/entities/User';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
-import User from '../models/User';
-import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 interface UserResponse {
   name: string;
@@ -20,6 +20,7 @@ const upload = multer(uploadConfig);
 
 userRouter.get('/', async (request, response) => {
   const userRepository = getRepository(User);
+
   const users = await userRepository.find();
   return response.json(users);
 });

@@ -1,14 +1,37 @@
 {
   "compilerOptions": {
-     "target": "es5",
+    "target": "es5",
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "strictPropertyInitialization": false,  //alterada
+    "strictPropertyInitialization": false, //alterada
     "esModuleInterop": true,
-    "experimentalDecorators": true,   //alterada
-    "emitDecoratorMetadata": true ,   //alterada
-    "forceConsistentCasingInFileNames": true
+    "experimentalDecorators": true, //alterada
+    "emitDecoratorMetadata": true, //alterada
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@modules/*": [
+        "modules/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ],
+      "@shared/*": [
+        "shared/*"
+      ],
+      "@services/*": [
+        "modules/appointments/services/*",
+        "modules/users/services/*"
+      ],
+      "@entities/*": [
+        "modules/appointments/infra/typeorm/entities/*",
+        "modules/users/infra/typeorm/entities/*"
+      ],
+      "@repositories/*": [
+        "modules/appointments/repositories/*",
+      ],
+    }
   }
 }

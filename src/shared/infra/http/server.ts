@@ -2,11 +2,11 @@ import 'reflect-metadata';
 import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';
 
-import AppError from './errors/AppError';
+import AppError from '@shared/errors/AppError';
 import 'express-async-errors';
 
-import routes from './routes';
-import './database';
+import routes from '@shared/infra/http/routes';
+import '@shared/infra/typeorm';
 
 const app = express();
 app.use(cors());
@@ -21,7 +21,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   } else {
     response.json({
       statur: 'error',
-      message: 'Internal Server Error ',
+      message: err,
     });
   }
 });
