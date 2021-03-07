@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 import uploadConfig from '@config/upload';
-import appointmentRouter from './appointments.router';
+import appointmentRouter from '../../../../modules/appointments/infra/http/routes/appointments.router';
 import userRouter from './users.router';
 import sessionRouter from './sessions.router';
 

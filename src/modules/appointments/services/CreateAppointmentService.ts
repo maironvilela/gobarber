@@ -2,14 +2,15 @@ import { getCustomRepository } from 'typeorm';
 import { startOfHour } from 'date-fns';
 
 import Appointment from '@entities/Appointment';
-import AppointmentRepository from '../repositories/AppointmentRepository';
+import AppointmentRepository from '../infra/typeorm/repositories/AppointmentRepository';
 
-interface Request {
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface IRequest {
   provider_id: string;
   date: Date;
 }
 class CreateAppointmentService {
-  public async execute({ provider_id, date }: Request): Promise<Appointment> {
+  public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
     const appointmentRepository = getCustomRepository(AppointmentRepository);
 
     const appoitmentDate = startOfHour(date);
@@ -27,9 +28,6 @@ class CreateAppointmentService {
       provider_id,
       date: appoitmentDate,
     });
-
-    // sava no banco de dados
-    await appointmentRepository.save(appointment);
 
     return appointment;
   }
