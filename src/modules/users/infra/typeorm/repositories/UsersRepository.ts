@@ -3,7 +3,6 @@ import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import { EntityRepository, getRepository, Repository } from "typeorm";
 import User from "../entities/User";
 
-@EntityRepository(User)
 class UsersRepository implements IUsersRepository {
   private ormRepository: Repository<User>
 
@@ -11,16 +10,19 @@ class UsersRepository implements IUsersRepository {
 
     this.ormRepository = getRepository(User)
   }
-  save(user: User): Promise<User> {
+  public async find(): Promise<User[]> {
+    return this.ormRepository.find();
+  }
+  public async save(user: User): Promise<User> {
     return this.ormRepository.save(user);
   }
-  findById(id: string): Promise<User | undefined> {
+  public async findById(id: string): Promise<User | undefined> {
     return this.ormRepository.findOne({ where: { id } })
   }
-  findByEmail(email: string): Promise<User | undefined> {
+  public async findByEmail(email: string): Promise<User | undefined> {
     return this.ormRepository.findOne({ where: { email } })
   }
-  create(userData: CreateUserDTO): Promise<User> {
+  public async create(userData: CreateUserDTO): Promise<User> {
     const user = this.ormRepository.create(userData)
     const userSave = this.ormRepository.save(user);
     return userSave;
