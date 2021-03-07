@@ -1,20 +1,24 @@
-import { getRepository } from 'typeorm';
 import { hash } from 'bcryptjs';
 
 import User from '@entities/User';
 import AppError from '@shared/errors/AppError';
+import IUsersRepository from '../repositories/IUsersRepository';
+import { inject, injectable } from 'tsyringe';
 
 interface Request {
   name: string;
   email: string;
   password: string;
 }
+@injectable()
 class CreateUserService {
+  constructor(
+    @inject('UsersRepository')
+    private userRepository: IUsersRepository) { }
+
+
   public async execute({ name, email, password }: Request): Promise<User> {
-    const userRepository = getRepository(User);
-    const CheckEmailExists = await userRepository.findOne({
-      where: { email },
-    });
+    const CheckEmailExists = await this.userRepository.findByEmail(email);
 
     if (CheckEmailExists) {
       throw new AppError('E-mail ja cadastrado', 400);
@@ -22,19 +26,13 @@ class CreateUserService {
 
     const hashedPassword = await hash(password, 8);
 
-    const user = userRepository.create({
+    const user = this.userRepository.create({
       name,
       email,
       password: hashedPassword,
     });
 
-    user.avatar = 'avatar_padrao.png';
-
-    const userSave = await userRepository.save(user);
-
-    // delete userSave.password;
-
-    return userSave;
+    return user;
   }
 }
 

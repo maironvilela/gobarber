@@ -1,21 +1,27 @@
-import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
 import uploadConfig from '@config/upload';
 import User from '@entities/User';
 import AppError from '@shared/errors/AppError';
+import IUsersRepository from '../repositories/IUsersRepository';
+import { injectable, inject } from 'tsyringe';
 
 interface Request {
   user_id: string;
   avatarFileName: string;
 }
 
+@injectable()
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatarFileName }: Request): Promise<User> {
-    const userRepository = getRepository(User);
 
-    const user = await userRepository.findOne(user_id);
+  constructor(
+    @inject('UsersRepository')
+    private userRepository: IUsersRepository) { }
+
+  public async execute({ user_id, avatarFileName }: Request): Promise<User> {
+
+    const user = await this.userRepository.findById(user_id);
 
     if (!user) {
       throw new AppError(
@@ -24,6 +30,7 @@ class UpdateUserAvatarService {
       );
     }
     if (user.avatar) {
+      console.log('entrou')
       // Define o caminho em que o arquivo foi salvo
       const userAvatarFilePath = path.join(
         uploadConfig.tmpDirectory,
@@ -40,7 +47,7 @@ class UpdateUserAvatarService {
     }
 
     user.avatar = avatarFileName;
-    const userUpdate = userRepository.save(user);
+    const userUpdate = this.userRepository.save(user);
 
     return userUpdate;
   }

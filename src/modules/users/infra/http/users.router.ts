@@ -5,8 +5,10 @@ import uploadConfig from '@config/upload';
 
 import CreateUserService from '@services/CreateUserService';
 import UpdateUserAvatarService from '@services/UpdateUserAvatarService';
-import User from '../../../../modules/users/infra/typeorm/entities/User';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import User from '../typeorm/entities/User';
+import ensureAuthenticated from '../../../../shared/infra/http/middlewares/ensureAuthenticated';
+import UserRepository from '@modules/users/infra/typeorm/repositories/UsersRepository'
+import { container } from 'tsyringe';
 
 interface UserResponse {
   name: string;
@@ -33,7 +35,8 @@ userRouter.patch(
     const avatarFileName = request.file.filename;
     const user_id = request.user.id;
 
-    const updateServerAvaterService = new UpdateUserAvatarService();
+    const userRepository = new UserRepository();
+    const updateServerAvaterService = container.resolve(UpdateUserAvatarService);
     const user = await updateServerAvaterService.execute({
       avatarFileName,
       user_id,
@@ -45,7 +48,8 @@ userRouter.patch(
 
 userRouter.post('/', async (request, response) => {
   const { name, email, password } = request.body;
-  const createUserService = new CreateUserService();
+
+  const createUserService = container.resolve(CreateUserService);
   const user = await createUserService.execute({
     name,
     email,

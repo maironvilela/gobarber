@@ -24,18 +24,7 @@
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/naming-convention": [
-      "error",
-      {
-        "selector": "interface",
-        "prefix": [
-          "I"
-        ],
-        "format": [
-          "PascalCase"
-        ]
-      }
-    ],
+    "prefixWithI": "always",
     "prettier/prettier": "error",
     "class-methods-use-this": "off",
     "@typescript-eslint/camelcase": "off",
