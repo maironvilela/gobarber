@@ -27,7 +27,6 @@ class FakeAppointmentRepository implements IAppointmentRepository {
       date.getTime() === appointment.date.getTime()
     )
 
-    console.log(findAppointment)
 
     return findAppointment;
 
