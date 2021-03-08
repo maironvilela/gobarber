@@ -2,9 +2,9 @@ import { startOfHour } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 
 import Appointment from '@entities/Appointment';
-import AppointmentRepository from '../infra/typeorm/repositories/AppointmentRepository';
+import IAppointmentRepository from '../repositories/IAppointmentsRepository';
+import AppError from '@shared/errors/AppError';
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface IRequest {
   provider_id: string;
   date: Date;
@@ -14,7 +14,7 @@ class CreateAppointmentService {
 
   constructor(
     @inject('AppointmentRepository')
-    private appointmentRepository: AppointmentRepository
+    private appointmentRepository: IAppointmentRepository
   ) { }
 
   public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
@@ -26,7 +26,7 @@ class CreateAppointmentService {
     );
 
     if (findAppointmentInSameDate) {
-      throw Error('This appoitment is already booked');
+      throw new AppError('This appoitment is already booked');
     }
 
     // cria a instancia do model

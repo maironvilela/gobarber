@@ -5,10 +5,10 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "strictPropertyInitialization": false, //alterada
+    "strictPropertyInitialization": false,
     "esModuleInterop": true,
-    "experimentalDecorators": true, //alterada
-    "emitDecoratorMetadata": true, //alterada
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
     "paths": {
@@ -30,8 +30,8 @@
         "modules/users/infra/typeorm/entities/*"
       ],
       "@repositories/*": [
-        "modules/appointments/repositories/*",
-      ],
+        "modules/appointments/repositories/*"
+      ]
     }
   }
 }
