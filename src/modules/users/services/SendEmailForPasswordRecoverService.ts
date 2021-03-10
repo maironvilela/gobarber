@@ -1,9 +1,9 @@
-import User from '@entities/User';
+import path from 'path';
+
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import { inject, injectable } from 'tsyringe';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
-import FakeUsersTokenRepository from '../repositories/fake/FakeUsersTokenRepository';
 import IUsersTokenRepository from '../repositories/IUsersTokenRepository';
 import UsersToken from '../infra/typeorm/entities/UsersToken';
 
@@ -12,6 +12,7 @@ interface Request {
 }
 @injectable()
 class SendEmailForPasswordRecoverService {
+
   constructor(
     @inject('UsersRepository')
     private userRepository: IUsersRepository,
@@ -20,7 +21,7 @@ class SendEmailForPasswordRecoverService {
     private mailProvider: IMailProvider,
 
     @inject('UsersTokenRepository')
-    private fakeUsersTokenRepository: IUsersTokenRepository
+    private usersTokenRepository: IUsersTokenRepository,
   ) { }
 
 
@@ -33,16 +34,29 @@ class SendEmailForPasswordRecoverService {
     }
 
     //recebe um tokem que será enviado por email para reset da senha
-    const userToken = await this.fakeUsersTokenRepository.generate(userFind.id);
+    const userToken = await this.usersTokenRepository.generate(userFind.id);
 
-    this.mailProvider.sendMail(
-      email,
-      'Email de para recuperação de senha recebido'
+
+    const forgotPasswordTemplate = path.resolve(__dirname, '..', 'views', 'forgot_password.hbs')
+
+
+    await this.mailProvider.sendMail({
+      to: {
+        name: userFind.name,
+        email: userFind.email,
+      },
+      subject: '[GoBarber] Recuperação de senha',
+      templateData: {
+        file: forgotPasswordTemplate,
+        variables: {
+          name: userFind.name,
+          link: `http://localhost:3000/forgot-password?token=${userToken.token}`
+        },
+      }
+    }
+
     )
-
     return userToken;
-
-
 
   }
 }

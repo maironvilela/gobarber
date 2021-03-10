@@ -23,7 +23,7 @@ class AuthenticateUserServer {
     @inject('UsersRepository')
     private userRepository: IUsersRepository,
     @inject('HashProvider')
-    private hashProvider: IHashProvider
+    private hashProvider: IHashProvider,
   ) { }
 
   public async execute({ email, password }: Request): Promise<Response> {

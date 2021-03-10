@@ -58,11 +58,10 @@ describe("Send Mail for password recover", () => {
 
     //variaveis com valores que serão passados como parametro
     const password = '111';
-    const confirmPassword = '111';
 
     //Reseta a senha
     await resetPasswordService.execute({
-      token, password, confirmPassword
+      token, password
     });
 
     //recupera o usuario pelo id para verificar se a senha foi alterada
@@ -87,13 +86,12 @@ describe("Send Mail for password recover", () => {
 
     //variaveis com valores que serão passados como parametro
     const password = '111';
-    const confirmPassword = '111';
 
 
 
     //verifica se a senha foi alterada
     expect(resetPasswordService.execute({
-      token: '123665', password, confirmPassword
+      token: '123665', password
     })).rejects.toBeInstanceOf(AppError);
 
   })
@@ -105,7 +103,7 @@ describe("Send Mail for password recover", () => {
 
     await expect(
       resetPasswordService.execute({
-        token, password: '123', confirmPassword: '123'
+        token, password: '123'
       })
     ).rejects.toBeInstanceOf(AppError);
 
@@ -138,7 +136,7 @@ describe("Send Mail for password recover", () => {
 
     //Reseta a senha
     await expect(resetPasswordService.execute({
-      token, password, confirmPassword
+      token, password
     })).rejects.toBeInstanceOf(AppError)
   })
 })

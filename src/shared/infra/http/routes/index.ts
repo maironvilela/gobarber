@@ -2,14 +2,17 @@ import express, { Router } from 'express';
 
 import uploadConfig from '@config/upload';
 import appointmentRouter from '../../../../modules/appointments/infra/http/routes/appointments.router';
-import userRouter from '../../../../modules/users/infra/http/routes/users.router';
-import sessionRouter from '../../../../modules/users/infra/http/routes/sessions.router';
+import userRouter from '../../../../modules/users/infra/http/routes/users.routes';
+import sessionRouter from '../../../../modules/users/infra/http/routes/sessions.routes';
+import passwordRouter from '../../../../modules/users/infra/http/routes/password.routes';
 
 const routes = Router();
 
 routes.use('/appointments', appointmentRouter);
-routes.use('/files', express.static(uploadConfig.tmpDirectory));
+routes.use('/files', express.static(uploadConfig.uploadFolder));
 routes.use('/users', userRouter);
 routes.use('/sessions', sessionRouter);
+routes.use('/password', passwordRouter);
+
 
 export default routes;

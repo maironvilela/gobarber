@@ -33,6 +33,9 @@ class AppointmentRepository implements IAppointmentRepository {
 
   public async find(): Promise<Appointment[] | undefined> {
     const findAppointment = await this.ormRepository.find();
+    findAppointment.forEach(fa => {
+      console.log(fa)
+    })
     return findAppointment;
   }
 }

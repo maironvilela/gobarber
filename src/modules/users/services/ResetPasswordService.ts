@@ -9,7 +9,6 @@ import IUsersTokenRepository from "../repositories/IUsersTokenRepository";
 interface iRequest {
   token: string,
   password: string,
-  confirmPassword: string
 }
 
 @injectable()
@@ -27,7 +26,7 @@ class ResetPasswordService {
 
   ) { }
 
-  public async execute({ token, password, confirmPassword }: iRequest): Promise<void> {
+  public async execute({ token, password }: iRequest): Promise<void> {
 
     const userToken = await this.userTokenRepository.findByToken(token);
 
@@ -52,7 +51,6 @@ class ResetPasswordService {
     user.password = await this.hashProvider.generateHash(password);
 
     this.userRepository.save(user)
-
 
   }
 
