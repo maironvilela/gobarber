@@ -11,6 +11,7 @@ import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepo
 
 import UseresTokenRepository from '@modules/users/infra/typeorm/repositories/UseresTokenRepository';
 import IUsersTokenRepository from '@modules/users/repositories/IUsersTokenRepository';
+import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 
 
 
@@ -29,6 +30,7 @@ container.registerSingleton<IUsersTokenRepository>(
   'UseresTokenRepository',
   UseresTokenRepository
 )
+
 
 
 

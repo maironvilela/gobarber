@@ -6,7 +6,7 @@ import uploadConfig from '@config/upload';
 import CreateUserService from '@services/CreateUserService';
 import UpdateUserAvatarService from '@services/UpdateUserAvatarService';
 import User from '../../typeorm/entities/User';
-import ensureAuthenticated from '../../../../../shared/infra/http/middlewares/ensureAuthenticated';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import UserRepository from '@modules/users/infra/typeorm/repositories/UsersRepository'
 import { container } from 'tsyringe';
 import UsersController from '../controller/UsersController';
@@ -29,8 +29,6 @@ userRouter.post('/', usersController.create);
 
 
 userRouter.get('/', usersController.index)
-
-
 
 userRouter.patch(
   '/avatar',
