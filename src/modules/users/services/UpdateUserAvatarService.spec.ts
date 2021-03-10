@@ -5,12 +5,19 @@ import AppError from "@shared/errors/AppError";
 import UpdateUserAvatarService from "../services/UpdateUserAvatarService";
 
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let updateUserAvatarService: UpdateUserAvatarService
+
+beforeEach(() => {
+  fakeUsersRepository = new FakeUsersRepository();
+  fakeStorageProvider = new FakeStorageProvider();
+  updateUserAvatarService = new UpdateUserAvatarService(fakeUsersRepository, fakeStorageProvider);
+})
+
 describe("Update Users Avatar", () => {
 
   it('should be able to upate avatar', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-    const updateUserAvatarService = new UpdateUserAvatarService(fakeUsersRepository, fakeStorageProvider);
 
     const user = await fakeUsersRepository.create({
       name: 'Maria da Silva',
@@ -28,12 +35,6 @@ describe("Update Users Avatar", () => {
   })
 
   it('should not be able to update the avatar without is authenticated', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-    const updateUserAvatarService = new UpdateUserAvatarService(fakeUsersRepository, fakeStorageProvider);
-
-
-
 
     expect(updateUserAvatarService.execute({
       user_id: '123',
@@ -43,9 +44,6 @@ describe("Update Users Avatar", () => {
   })
 
   it('should be able to delete old avatar', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-    const updateUserAvatarService = new UpdateUserAvatarService(fakeUsersRepository, fakeStorageProvider);
 
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
     const user = await fakeUsersRepository.create({
