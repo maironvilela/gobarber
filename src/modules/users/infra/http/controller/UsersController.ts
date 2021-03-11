@@ -1,3 +1,4 @@
+import ListProviderServier from "@modules/appointments/services/ListProviderService";
 import CreateUserService from "@modules/users/services/CreateUserService";
 import { Request, Response } from "express";
 
@@ -22,7 +23,7 @@ export default class UsersController {
 
   public async index(request: Request, response: Response): Promise<Response> {
     const usersRepository = new UsersRepository();
-    const users = await usersRepository.find();
+    const users = await usersRepository.findAllProviders({});
     return response.json(users);
 
   }
