@@ -1,9 +1,11 @@
 // repositorio especifico do typeorm
-import { getRepository, Repository, EntityRepository } from 'typeorm';
+import { getRepository, Repository, Raw } from 'typeorm';
 
 import Appointment from '@entities/Appointment';
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
+import IFindAllMonthFromProvidersDTO from '@modules/appointments/dtos/IFindAllMonthFromProvidersDTO';
+import IFindAllDayFromProvidersDTO from '@modules/appointments/dtos/IFindAllDayFromProvidersDTO';
 
 class AppointmentRepository implements IAppointmentRepository {
   private ormRepository: Repository<Appointment>;
@@ -11,6 +13,48 @@ class AppointmentRepository implements IAppointmentRepository {
   // construtor que criara uma instancia de getRepository
   constructor() {
     this.ormRepository = getRepository(Appointment);
+  }
+
+
+  public async findAllInDayFromProvider({ provider_id, day, month, year }: IFindAllDayFromProvidersDTO): Promise<Appointment[]> {
+
+    const parseMonth = String(month).padStart(2, '0')
+    const parseDay = String(day).padStart(2, '0')
+
+
+    const appointments = await this.ormRepository.find({
+      where: {
+        provider_id,
+        date: Raw(dateFieldName => `to_char(
+          ${dateFieldName}, 'DD-MM-yyyy') = '${parseDay}-${parseMonth}-${year}'`,
+        )
+      }
+    });
+
+    return appointments;
+  }
+
+  public async findAllInMonthFromProvider({
+    provider_id, month, year
+  }: IFindAllMonthFromProvidersDTO): Promise<Appointment[]> {
+    // 1 => 01
+    const parseMonth = String(month).padStart(2, '0')
+
+    console.log(`Provider ID ${provider_id}`)
+    console.log(`Mes ${parseMonth}`)
+    console.log(`Ano ${year}`)
+
+    const appointment = await this.ormRepository.find({
+      where: {
+        provider_id: provider_id,
+        date: Raw(dateFieldName => `to_char(
+          ${dateFieldName}, 'MM-YYYY') = '${parseMonth}-${year}'`,
+        )
+      }
+    })
+
+
+    return appointment;
   }
 
   public async create({
