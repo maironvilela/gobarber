@@ -1,4 +1,4 @@
-import { startOfHour } from 'date-fns';
+import { startOfHour, isAfter, isBefore, getDate, getHours } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 
 import Appointment from '@entities/Appointment';
@@ -7,6 +7,7 @@ import AppError from '@shared/errors/AppError';
 
 interface IRequest {
   provider_id: string;
+  user_id: string;
   date: Date;
 }
 @injectable()
@@ -17,9 +18,23 @@ class CreateAppointmentService {
     private appointmentRepository: IAppointmentRepository
   ) { }
 
-  public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
+  public async execute({ provider_id, user_id, date }: IRequest): Promise<Appointment> {
+
+    if (provider_id === user_id) {
+      throw new AppError('Falha ao realizar agendamento. Favor, escolher outro prestador')
+    }
+
+    if (isBefore(date, Date.now())) {
+      throw new AppError('Não pode ser realizado um agendamento com a data informada. Favor informar uma data valida')
+    }
+
+
+    if (getHours(date) < 8 || getHours(date) > 17) {
+      throw new AppError('Não pode ser realizado um agendamento no horario informada. Favor informar um horario de 08:00 as 17:00')
+    }
 
     const appoitmentDate = startOfHour(date);
+
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
       appoitmentDate,
@@ -32,6 +47,7 @@ class CreateAppointmentService {
     // cria a instancia do model
     const appointment = this.appointmentRepository.create({
       provider_id,
+      user_id,
       date: appoitmentDate,
     });
 

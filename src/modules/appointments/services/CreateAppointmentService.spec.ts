@@ -3,14 +3,23 @@ import CreateAppointmentService from './CreateAppointmentService';
 import FakeAppointmentRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import AppError from "@shared/errors/AppError";
 
+let fakeAppointmentRepository: FakeAppointmentRepository;
+let createAppointment: CreateAppointmentService;
 describe("Create Appointment", () => {
+  beforeEach(() => {
+    fakeAppointmentRepository = new FakeAppointmentRepository();
+    createAppointment = new CreateAppointmentService(fakeAppointmentRepository);
+  })
+
   it('should be able to create a new appointment', async () => {
-    const fakeAppointmentRepository = new FakeAppointmentRepository();
-    const createAppointment = new CreateAppointmentService(fakeAppointmentRepository);
+
+    const date = new Date();
+    date.setDate(date.getDate() + 1)
 
     const appointment = await createAppointment.execute({
-      date: new Date(),
-      provider_id: "123"
+      date: date,
+      user_id: "user_id",
+      provider_id: "123",
     })
 
     expect(appointment).toHaveProperty('id')
@@ -19,20 +28,67 @@ describe("Create Appointment", () => {
 
 
   it('should be able to return an error in case of two appointments with the same date', async () => {
-    const fakeAppointmentRepository = new FakeAppointmentRepository();
-    const createAppointment = new CreateAppointmentService(fakeAppointmentRepository);
 
-    const dateAppointment = new Date(2021, 2, 12, 11);
+    let dateAppointment = new Date();
+    dateAppointment.setHours(dateAppointment.getHours() + 1)
 
     await createAppointment.execute({
       date: dateAppointment,
-      provider_id: "123"
+      provider_id: "123",
+      user_id: 'user_id'
     });
 
-    expect(createAppointment.execute({
+    await expect(createAppointment.execute({
       date: dateAppointment,
-      provider_id: "1234"
+      provider_id: "1234",
+      user_id: 'user_id'
     }),
     ).rejects.toBeInstanceOf(AppError);
   });
+
+  it('should not be able to two appointments with the same user and provider user', async () => {
+
+    const date = new Date();
+    date.setHours(date.getHours() + 1)
+
+    await expect(createAppointment.execute({
+      date,
+      provider_id: "user_id",
+      user_id: 'user_id'
+
+    }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an appointments before 8am', async () => {
+
+    const date = new Date();
+    date.setHours(4);
+
+    console.log(date)
+
+    await expect(createAppointment.execute({
+      date,
+      provider_id: "provider_id",
+      user_id: 'user_id'
+
+    }),
+    ).rejects.toBeInstanceOf(AppError);
+
+  });
+
+  it('should not be able to create an appointments after 17pm', async () => {
+    const date = new Date();
+    date.setHours(21);
+
+    console.log('should not be able to create an appointments after 17pm')
+
+    await expect(createAppointment.execute({
+      date,
+      provider_id: "provider_id",
+      user_id: 'user_id'
+
+    }),
+    ).rejects.toBeInstanceOf(AppError);
+  })
 });

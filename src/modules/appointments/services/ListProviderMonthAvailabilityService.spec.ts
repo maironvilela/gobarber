@@ -1,7 +1,5 @@
 import "reflect-metadata"
-import CreateAppointmentService from './CreateAppointmentService';
 import FakeAppointmentRepository from '../repositories/fakes/FakeAppointmentsRepository';
-import AppError from "@shared/errors/AppError";
 import ListProviderMonthAvailabilityService from '../services/ListProviderMonthAvailabilityService'
 
 let fakeAppointmentRepository: FakeAppointmentRepository;
@@ -17,63 +15,74 @@ describe("ProviderMonthAvailability", () => {
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 8, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 9, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 10, 0, 0)
     })
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 11, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 12, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 13, 0, 0)
     })
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 14, 0, 0)
     })
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 15, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 16, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 21, 17, 0, 0)
     })
 
 
     await fakeAppointmentRepository.create({
       provider_id: '123',
+      user_id: 'user_id',
       date: new Date(2021, 2, 22, 8, 0, 0)
     })
 

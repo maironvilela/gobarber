@@ -25,18 +25,6 @@ class User {
   @Column()
   avatar: string;
 
-  @Column()
-  provider_id: string
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'provider_id' })
-
-  @Column()
-  user_id: string
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-
   @CreateDateColumn()
   created_at: Date;
 
