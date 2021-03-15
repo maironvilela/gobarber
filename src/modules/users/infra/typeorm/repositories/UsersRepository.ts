@@ -30,7 +30,6 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async save(user: User): Promise<User> {
-    console.log(user)
     return await this.ormRepository.save(user);
   }
   public async findById(id: string): Promise<User | undefined> {

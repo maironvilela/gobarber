@@ -11,6 +11,7 @@ import UserRepository from '@modules/users/infra/typeorm/repositories/UsersRepos
 import { container } from 'tsyringe';
 import UsersController from '../controller/UsersController';
 import UserAvatarController from '../controller/UserAvatarController';
+import { celebrate, Joi, Segments } from 'celebrate';
 
 interface UserResponse {
   name: string;
@@ -25,7 +26,13 @@ const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
 
 
-userRouter.post('/', usersController.create);
+userRouter.post('/', celebrate({
+  [Segments.BODY]: {
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
+  }
+}), usersController.create);
 
 
 userRouter.get('/', usersController.index)

@@ -3,7 +3,7 @@ import SendEmailForPasswordRecoverService from "../../../services/SendEmailForPa
 import { container } from "tsyringe";
 import UsersRepository from "../../typeorm/repositories/UsersRepository";
 import FakeMailProvider from "@shared/container/providers/MailProvider/fake/FakeMailProvider";
-import UsersTokenRepository from "../../typeorm/repositories/UseresTokenRepository";
+import UsersTokenRepository from "../../typeorm/repositories/UsersTokenRepository";
 import EtherealMailProvider from "@shared/container/providers/MailProvider/implementations/EtherealMailProvider";
 
 export default class ForgotPasswordController {
