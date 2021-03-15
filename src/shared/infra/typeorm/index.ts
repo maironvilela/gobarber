@@ -1,4 +1,4 @@
-import { createConnection } from 'typeorm';
+import { createConnections } from 'typeorm';
 
 // Busca as configuraçoes no arquivo ormconfig
-createConnection();
+createConnections();
