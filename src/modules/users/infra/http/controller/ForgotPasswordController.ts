@@ -11,20 +11,9 @@ export default class ForgotPasswordController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { email } = request.body;
 
-    const userRepository = new UsersRepository();
-    const mailProvider = new EtherealMailProvider();
-    const userTokenRepository = new UsersTokenRepository();
-
-
-    const sendEmailForPasswordRecoverService = new SendEmailForPasswordRecoverService(
-      userRepository,
-      mailProvider,
-      userTokenRepository,
-    )
-
-    /**  const sendEmailForPasswordRecoverService = container.resolve(
+    const sendEmailForPasswordRecoverService = container.resolve(
       SendEmailForPasswordRecoverService
-    );*/
+    );
 
 
     const userToken = await sendEmailForPasswordRecoverService.execute({ email })

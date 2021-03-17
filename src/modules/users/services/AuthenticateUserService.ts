@@ -1,4 +1,5 @@
 import { sign } from 'jsonwebtoken';
+import { classToClass } from 'class-transformer';
 
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
@@ -6,6 +7,7 @@ import User from '../infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
 import { inject, injectable } from 'tsyringe';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+
 
 interface Request {
   email: string;
@@ -39,14 +41,17 @@ class AuthenticateUserServer {
       throw new AppError('Email ou senha Invalidos', 401);
     }
 
-    const { secret, expiresIn } = authConfig.jwt;
+    const { secret = '', expiresIn } = authConfig.jwt;
+
 
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,
     });
 
-    return { user, token };
+
+
+    return { user: classToClass(user), token };
   }
 }
 export default AuthenticateUserServer;
