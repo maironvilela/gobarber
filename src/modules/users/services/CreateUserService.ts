@@ -4,6 +4,7 @@ import IUsersRepository from '../repositories/IUsersRepository';
 import { inject, injectable } from 'tsyringe';
 
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 interface Request {
   name: string;
@@ -15,8 +16,12 @@ class CreateUserService {
   constructor(
     @inject('UsersRepository')
     private userRepository: IUsersRepository,
+
     @inject('HashProvider')
-    private hashProvider: IHashProvider
+    private hashProvider: IHashProvider,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) { }
 
 
@@ -34,6 +39,8 @@ class CreateUserService {
       email,
       password: hashedPassword,
     });
+
+    await this.cacheProvider.invalidate('users-list:all')
 
     return user;
   }

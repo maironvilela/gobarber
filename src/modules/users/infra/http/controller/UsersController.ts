@@ -1,10 +1,11 @@
-import ListProviderServier from "@modules/appointments/services/ListProviderService";
 import CreateUserService from "@modules/users/services/CreateUserService";
 import { Request, Response } from "express";
 import { classToClass } from 'class-transformer';
 
 import { container } from 'tsyringe';
 import UsersRepository from "../../typeorm/repositories/UsersRepository";
+import ListUserService from "@modules/users/services/ListUserService";
+
 
 
 export default class UsersController {
@@ -23,8 +24,10 @@ export default class UsersController {
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
-    const usersRepository = new UsersRepository();
-    const users = await usersRepository.findAllProviders({});
+    const listUserService = container.resolve(ListUserService);
+
+    const users = await listUserService.execute();
+
     return response.json(users);
 
   }

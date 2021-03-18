@@ -1,14 +1,8 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
 import multer from 'multer';
 import uploadConfig from '@config/upload';
 
-import CreateUserService from '@services/CreateUserService';
-import UpdateUserAvatarService from '@services/UpdateUserAvatarService';
-import User from '../../typeorm/entities/User';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
-import UserRepository from '@modules/users/infra/typeorm/repositories/UsersRepository'
-import { container } from 'tsyringe';
 import UsersController from '../controller/UsersController';
 import UserAvatarController from '../controller/UserAvatarController';
 import { celebrate, Joi, Segments } from 'celebrate';
@@ -21,7 +15,7 @@ interface UserResponse {
 }
 
 const userRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
 

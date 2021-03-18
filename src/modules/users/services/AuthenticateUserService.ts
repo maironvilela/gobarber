@@ -7,6 +7,8 @@ import User from '../infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
 import { inject, injectable } from 'tsyringe';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import cache from '@config/cache';
 
 
 interface Request {
@@ -26,6 +28,8 @@ class AuthenticateUserServer {
     private userRepository: IUsersRepository,
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) { }
 
   public async execute({ email, password }: Request): Promise<Response> {
@@ -48,6 +52,11 @@ class AuthenticateUserServer {
       subject: user.id,
       expiresIn,
     });
+
+    //await this.cacheProvider.save('key2', 'value2')
+    const cacheDate = await this.cacheProvider.recover('key2')
+    console.log(cacheDate)
+
 
 
 
