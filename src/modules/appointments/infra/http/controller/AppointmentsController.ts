@@ -4,7 +4,7 @@ import { parseISO } from 'date-fns';
 import { container, inject, injectable } from 'tsyringe';
 
 
-import CreateAppointmentService from '@services/CreateAppointmentService';
+import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 import AppointmentRepository from "../../typeorm/repositories/AppointmentRepository";
 
 export default class AppointmentsController {

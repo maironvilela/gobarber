@@ -1,7 +1,7 @@
 // repositorio especifico do typeorm
 import { getRepository, Repository, Raw } from 'typeorm';
 
-import Appointment from '@entities/Appointment';
+import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 import IFindAllMonthFromProvidersDTO from '@modules/appointments/dtos/IFindAllMonthFromProvidersDTO';

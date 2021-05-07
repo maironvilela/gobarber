@@ -22,17 +22,6 @@
       "@shared/*": [
         "shared/*"
       ],
-      "@services/*": [
-        "modules/appointments/services/*",
-        "modules/users/services/*"
-      ],
-      "@entities/*": [
-        "modules/appointments/infra/typeorm/entities/*",
-        "modules/users/infra/typeorm/entities/*"
-      ],
-      "@repositories/*": [
-        "modules/appointments/repositories/*"
-      ]
     }
   }
 }

@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 import uploadConfig from '@config/upload';
-import User from '@entities/User';
+import User from '@modules/users/infra/typeorm/entities/User'
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import { injectable, inject } from 'tsyringe';
