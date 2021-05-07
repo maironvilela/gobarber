@@ -1,6 +1,5 @@
 import handlebars from 'handlebars'
 import IMailProvider from "../../MailProvider/models/IMailProvider";
-import nodemailer, { Transporter } from 'nodemailer';
 import IEmailTemplateProvider from "../models/IMailTemplateProvider";
 import IParseMailTemplateDTO from "../dtos/IParseMailTemplateDTO";
 import fs from 'fs'

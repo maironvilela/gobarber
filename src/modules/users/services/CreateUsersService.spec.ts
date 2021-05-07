@@ -3,15 +3,25 @@ import CreateUserService from '../services/CreateUserService';
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import AppError from "@shared/errors/AppError";
+import ICacheProvider from "@shared/container/providers/CacheProvider/models/ICacheProvider";
+import RedisCacheProvider from "@shared/container/providers/CacheProvider/Implementations/RedisCacheProvider";
+import cache from "@config/cache";
 
 let fakeHashProvider: FakeHashProvider;
 let fakeUsersRepository: FakeUsersRepository;
-let createUsersService: CreateUserService
+let createUsersService: CreateUserService;
+let cacheProvider: ICacheProvider;
+
 
 beforeEach(() => {
   fakeHashProvider = new FakeHashProvider();
   fakeUsersRepository = new FakeUsersRepository();
-  createUsersService = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+  cacheProvider = new RedisCacheProvider();
+  createUsersService = new CreateUserService(
+    fakeUsersRepository,
+    fakeHashProvider,
+    cacheProvider
+  );
 
 })
 

@@ -1,5 +1,5 @@
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
-import { getDate, getDaysInMonth } from "date-fns";
+import { compareAsc, endOfDay, getDate, getDaysInMonth, isAfter } from "date-fns";
 import { inject, injectable } from "tsyringe";
 import Appointment from "../infra/typeorm/entities/Appointment";
 import IAppointmentRepository from "../repositories/IAppointmentsRepository";
@@ -30,7 +30,6 @@ class ListProviderMonthAvailabilityService {
   }: IRequest): Promise<IResponse> {
 
 
-
     const appointments = await this.appointmentRepository.findAllInMonthFromProvider(
       {
         provider_id,
@@ -42,6 +41,7 @@ class ListProviderMonthAvailabilityService {
     //Quantidade de dias no mes
     const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1))
 
+
     //cria um array com todos os dias do mes
     const eachDayArray = Array.from({
       length: numberOfDaysInMonth,
@@ -51,6 +51,10 @@ class ListProviderMonthAvailabilityService {
     menos de 10 agendamentos {day: 1, available: true}*/
     const availability = eachDayArray.map(
       day => {
+        //const compareDate = new Date(year, month - 1, day)
+        const compareDate = endOfDay(new Date(year, month - 1, day))
+        console.log(new Date().toLocaleString('pt-BR', { timeZone: 'Asia/Jakarta' }))
+
         const appointmentsInDay = appointments.filter(
           appointment => {
             return getDate(appointment.date) === day
@@ -58,12 +62,9 @@ class ListProviderMonthAvailabilityService {
 
         return {
           day,
-          available: appointmentsInDay.length < 10
+          available: isAfter(compareDate, new Date()) && appointmentsInDay.length < 10
         }
       })
-
-    console.log(availability)
-
 
 
 

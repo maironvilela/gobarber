@@ -4,29 +4,37 @@ import CreateUserService from '../services/CreateUserService';
 import FakeUsersRepository from '../repositories/fake/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import AppError from "@shared/errors/AppError";
+import RedisCacheProvider from "@shared/container/providers/CacheProvider/Implementations/RedisCacheProvider";
+import ICacheProvider from "@shared/container/providers/CacheProvider/models/ICacheProvider";
 
 let fakeHashProvider: FakeHashProvider;
 let fakeUsersRepository: FakeUsersRepository;
 let createUsersService: CreateUserService;
 let authenticateUserService: AuthenticateUserService;
+let cacheProvider: ICacheProvider;
 
 beforeEach(() => {
   fakeHashProvider = new FakeHashProvider();
   fakeUsersRepository = new FakeUsersRepository();
+  cacheProvider = new RedisCacheProvider();
+
   createUsersService = new CreateUserService(
     fakeUsersRepository,
-    fakeHashProvider
+    fakeHashProvider,
+    cacheProvider
   );
+
   authenticateUserService = new AuthenticateUserService(
     fakeUsersRepository,
-    fakeHashProvider
+    fakeHashProvider,
+    cacheProvider
   );
 })
 
 describe("Authenticate Users", () => {
   it('should be able to authenticate', async () => {
 
-    const user = await createUsersService.execute({
+    const user = await fakeUsersRepository.create({
       name: "maria",
       email: "maria@email.com",
       password: '123456'
@@ -36,6 +44,8 @@ describe("Authenticate Users", () => {
       email: "maria@email.com",
       password: '123456'
     })
+
+    console.log
 
     expect(response).toHaveProperty('token')
     expect(response.user).toEqual(user)
@@ -64,7 +74,7 @@ describe("Authenticate Users", () => {
 
 
 
-    const user = await createUsersService.execute({
+    const user = await fakeUsersRepository.create({
       name: "maria",
       email: "maria@email.com",
       password: '123456'

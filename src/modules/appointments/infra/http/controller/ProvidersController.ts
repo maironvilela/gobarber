@@ -1,6 +1,5 @@
 import ListProviderServier from "@modules/appointments/services/ListProviderService";
-import UsersRepository from "@modules/users/infra/typeorm/repositories/UsersRepository";
-import IUsersRepository from "@modules/users/repositories/IUsersRepository";
+import { classToClass } from 'class-transformer';
 import { Request, Response } from "express";
 import { container, inject, injectable } from "tsyringe";
 
@@ -14,17 +13,17 @@ export default class ProvidersController {
 
     const userId = request.user.id;
 
-    console.log('USer ID: ' + userId)
-
     const listProviderServier = container.resolve(ListProviderServier);
 
-    const users = await listProviderServier.execute(
+    const providers = await listProviderServier.execute(
       {
         userId
       }
     )
 
-    return response.status(200).json(users)
+    console.log(classToClass(providers))
+
+    return response.json(classToClass(providers))
 
   }
 }

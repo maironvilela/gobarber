@@ -1,14 +1,19 @@
 import FakeUsersRepositories from "@modules/users/repositories/fake/FakeUsersRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
+import RedisCacheProvider from "@shared/container/providers/CacheProvider/Implementations/RedisCacheProvider";
+import ICacheProvider from "@shared/container/providers/CacheProvider/models/ICacheProvider";
 import ListProviderServier from "./ListProviderService"
 
 let listProviderService: ListProviderServier;
 let usersRepository: IUsersRepository
+let cacheProvider: ICacheProvider;
 
 beforeEach(() => {
   usersRepository = new FakeUsersRepositories;
+  cacheProvider = new RedisCacheProvider();
   listProviderService = new ListProviderServier(
-    usersRepository
+    usersRepository,
+    cacheProvider
   );
 
 

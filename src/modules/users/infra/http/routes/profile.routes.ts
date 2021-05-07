@@ -14,17 +14,20 @@ const profileController = new ProfileController();
 
 profileRouter.put('/', celebrate({
   [Segments.BODY]: {
-    id: Joi.string().uuid().required(),
     name: Joi.string().required(),
     email: Joi.string().email().required(),
+    old_password: Joi.string(),
     password: Joi.string(),
-    old_password: Joi.when('password', {
-      is: Joi.exist(),
-      then: Joi.required(),
-    })
+    password_confirmation: Joi.when('password', {
+      is: Joi.equal("Confirmação de senha nao confere"),
+      then: Joi.string(),
+    }),
+
   }
 
 }), profileController.update);
+
+
 profileRouter.get('/', profileController.show);
 
 

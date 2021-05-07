@@ -10,7 +10,8 @@ interface IRequest {
   name?: string,
   email?: string,
   password?: string,
-  old_password?: string
+  old_password?: string,
+  password_confirmation: string,
 }
 
 @injectable()
@@ -29,7 +30,8 @@ class UpdateProfileService {
       name,
       email,
       password,
-      old_password }: IRequest): Promise<User> {
+      old_password,
+      password_confirmation }: IRequest): Promise<User> {
 
 
     let hashPassword;
@@ -52,6 +54,10 @@ class UpdateProfileService {
 
       if (!old_password) {
         throw new AppError('Senha antiga deve ser informada')
+      }
+
+      if (password !== password_confirmation) {
+        throw new AppError(`Senha não confirmada`)
       }
 
       if (!await this.hashProvider.compareHash(old_password, user.password)) {

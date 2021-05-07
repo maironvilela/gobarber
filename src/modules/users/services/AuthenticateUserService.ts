@@ -47,20 +47,13 @@ class AuthenticateUserServer {
 
     const { secret = '', expiresIn } = authConfig.jwt;
 
-
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,
     });
 
-    //await this.cacheProvider.save('key2', 'value2')
-    const cacheDate = await this.cacheProvider.recover('key2')
-    console.log(cacheDate)
 
-
-
-
-    return { user: classToClass(user), token };
+    return { user, token };
   }
 }
 export default AuthenticateUserServer;

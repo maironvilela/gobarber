@@ -20,12 +20,11 @@ class ListUserService {
   public async execute(): Promise<User[]> {
 
     //verifica se a consulta consta no cache
-    const dataCache = await this.cacheProvider.recover<User[]>(`users-list:all`);
+    let dataCache;
+    dataCache = await this.cacheProvider.recover<User[]>(`users-list:all`);
 
     if (dataCache) {
       console.log("Buscando no Cache")
-      // await this.cacheProvider.invalidate('users-list:all');
-
       return dataCache;
     }
 
