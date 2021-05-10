@@ -62,7 +62,7 @@ jobs:
             cd ~/app/GoStack-gobarber
             yarn
             ./node_modules/.bin/typeorm migration:run
-            pm2 restar gobarber-api
+            pm2 restart gobarber-api
   
           
             
